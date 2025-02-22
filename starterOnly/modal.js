@@ -1,7 +1,7 @@
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
-const modalCloseBtn = document.querySelector(".close");
+const modalCloseBtn = document.querySelectorAll(".close");
 const form = document.querySelector("form");
 const formData = document.querySelectorAll(".formData");
 const burgerMenu = document.querySelector("#burger_menu");
@@ -11,6 +11,16 @@ const dobField = document.querySelector("#birthdate");
 const numberInput = document.querySelector("#quantity");
 const radios = document.querySelectorAll('input[name="location"]');
 const termsCheckbox = document.querySelector('input[name="terms"]');
+
+const formErrors = {
+  isFirstNameValid: false,
+  isLastNameValid: false,
+  isEmailValid: false,
+  isDateOfBirthValid: false,
+  isQuantityValid: false,
+  isLocationValid: false,
+  isTermsChecked: false,
+};
 
 // burger menu responsive
 burgerMenu.addEventListener("click", editNav);
@@ -30,7 +40,7 @@ function launchModal() {
 }
 
 // close modal
-modalCloseBtn.addEventListener("click", closeModal);
+modalCloseBtn.forEach((btn) => btn.addEventListener("click", closeModal));
 function closeModal() {
   modalbg.style.display = "none";
 }
@@ -75,9 +85,11 @@ function isFirstAndLastNameValid(e) {
   const input = e.target;
   const isValid = isStringLongEnough(input.value.trim());
 
-  if (!isValid === true) {
+  if (!isValid) {
+    formErrors[e.target.name] = false;
     setError(input, "Veuillez saisir 2 caractères minimum");
   } else {
+    formErrors[e.target.name] = true;
     setError(input, "");
   }
 }
@@ -92,11 +104,11 @@ function isEmailValid(e) {
   const input = e.target;
   const email = input.value;
   if (!regex.test(email)) {
+    formErrors.isEmailValid = false;
     setError(input, "Veuillez entrer un email valide");
-    return false;
   } else {
+    formErrors.isEmailValid = true;
     setError(input, "");
-    return true;
   }
 }
 
@@ -109,11 +121,11 @@ function isDateOfBirthValid(e) {
   const input = e.target;
 
   if (!input.value) {
+    formErrors.isDateOfBirthValid = false;
     setError(input, "Veuillez entrer votre date de naissance");
-    return false;
   } else {
+    formErrors.isDateOfBirthValid = true;
     setError(input, "");
-    return true;
   }
 }
 
@@ -125,11 +137,11 @@ function isDateOfBirthValid(e) {
 function isQuantityValid(e) {
   const input = e.target;
   if (input.value.trim() === "" || isNaN(input.value)) {
+    formErrors.isQuantityValid = false;
     setError(input, "Veuillez entrer un nombre valide");
-    return false;
   } else {
+    formErrors.isQuantityValid = true;
     setError(input, "");
-    return true;
   }
 }
 
@@ -141,13 +153,13 @@ function isQuantityValid(e) {
 function isLocationValid() {
   const selectedLocation = Array.from(radios).some((radio) => radio.checked);
   if (!selectedLocation) {
+    formErrors.isLocationValid = false;
     radios.forEach((radio) =>
       setError(radio, "Veuillez sélectionner une ville")
     );
-    return false;
   } else {
+    formErrors.isLocationValid = true;
     radios.forEach((radio) => setError(radio, ""));
-    return true;
   }
 }
 
@@ -158,46 +170,38 @@ function isLocationValid() {
 
 function isTermsChecked() {
   if (!termsCheckbox.checked) {
+    formErrors.isTermsChecked = false;
     setError(termsCheckbox, "Vous devez accepter les conditions d'utilisation");
-    return false;
   } else {
+    formErrors.isTermsChecked = true;
     setError(termsCheckbox, "");
-    return true;
   }
 }
 
 //
 // Form submit
 // This function allows to keep the entered values in the form if it doesn't pass the check validity.
+// If all the entries are correct, display the confirm overlay with a confirm message & reset form.
 //
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  let isValid = true; // global valid marker
+  let isInvalid = Object.values(formErrors).some((field) => field === false);
 
-  // First & last name check
-  twoMinCharsFields.forEach((input) => {
-    isFirstAndLastNameValid({ target: input });
-  });
+  isFirstAndLastNameValid({ target: twoMinCharsFields[0] }); // check first name
+  isFirstAndLastNameValid({ target: twoMinCharsFields[1] }); // check last name
+  isEmailValid({ target: emailField }); // check email
+  isDateOfBirthValid({ target: dobField }); // check date of birth
+  isQuantityValid({ target: numberInput }); // check a numeric number
+  isLocationValid(); // check if a location is checked
+  isTermsChecked(); // check if the terms are checked
 
-  // Email check
-  if (!isEmailValid({ target: emailField })) isValid = false;
+  if (!isInvalid) {
+    const confirmOverlay = document.querySelector(".confirmOverlay");
+    confirmOverlay.style.visibility = "visible";
+    confirmOverlay.style.opacity = "1";
 
-  // Date of Birth check
-  if (!isDateOfBirthValid({ target: dobField })) isValid = false;
-
-  // Quantity check
-  if (!isQuantityValid({ target: numberInput })) isValid = false;
-
-  // Location selected check
-  if (!isLocationValid()) isValid = false;
-
-  // Terms conditions check
-  if (!isTermsChecked()) isValid = false;
-
-  if (isValid) {
-    alert("Formulaire soumis avec succès !");
     form.reset();
   }
 });

@@ -11,13 +11,12 @@
 /* Landing Page */
 
 body {
-  margin: 0;
   display: flex;
   flex-direction: column;
-  /* background-image: url("bg_img.jpg"); */
   font-family: var(--font-default);
   font-size: 18px;
-  max-width: 1300px;
+  max-width: 1440px;
+  height: 100vh;
   margin: 0 auto;
 }
 
@@ -31,8 +30,10 @@ img {
 }
 
 .topnav {
-  overflow: hidden;
-  margin: 3.5%;
+  /* overflow: hidden; */
+  margin: 52px 100px;
+  max-width: 1240px;
+  height: 52px;
 }
 .header-logo {
     float: left;
@@ -49,7 +50,7 @@ img {
   padding: 12px 12px;
   margin: 5px;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 18px;
   font-family: Roboto, sans-serif;
 }
 
@@ -116,14 +117,15 @@ main {
   font-size: 130%;
   font-weight: bolder;
   color: black;
-  padding-top: 0.5vw;
+  /* padding-top: 0.5vw;
   padding-left: 2vw;
   padding-right: 2vw;
-  margin: 1px 20px 15px;
+  margin: 1px 20px 15px; */
   border-radius: 2rem;
   text-align: justify;
-
-
+  max-width: 1240px;
+  margin: 0 100px;
+  
 }
 
 .modal-btn {
@@ -177,7 +179,9 @@ main {
   height: 100%;
   width: 100%;
   overflow: auto;
-  background-color: rgba(26, 39, 156, 0.4);
+  /* background-color: rgba(26, 39, 156, 0.4); */
+  background-color: rgba(250,250,250,0.9);
+  
 }
 
 .content {
@@ -196,15 +200,20 @@ main {
 
 .modal-body {
   padding: 15px 8%;
-  margin: 15px auto;
+  margin: 15px auto 0;
 }
 
 label {
   font-family: var(--font-default);
-  font-size: 17px;
+  font-size: 14px;
   font-weight: normal;
   display: inline-block;
   margin-bottom: 11px;
+}
+p.text-label {
+  font-size: 14px;
+  margin-bottom: 11px;
+  padding: 0;
 }
 input {
   padding: 8px;
@@ -216,17 +225,20 @@ input {
   padding: 8px;
   width: 100%;
   border-radius: 8px;
-  font-size: 20px;
+  font-size: 18px;
   height: 48px;
+}
+.formData {
+  margin-bottom: 11px;
+  line-height: 1rem;
 }
 .formData[data-error]::after {
   content: attr(data-error);
   font-size: 0.4em;
   color: #e54858;
   display: block;
-  margin-top: 7px;
-  margin-bottom: 7px;
-  text-align: right;
+  padding-top: 7px;
+  text-align: left;
   line-height: 0.3;
   opacity: 0;
   transition: 0.3s;
@@ -307,7 +319,7 @@ input[data-error]::after {
   left: 21%;
   top: 19%;
 }
-.close {
+.close-cross {
   position: absolute;
   right: 15px;
   top: 15px;
@@ -316,9 +328,10 @@ input[data-error]::after {
   opacity: 1;
   cursor: pointer;
   transform: scale(0.7);
+  z-index: 100;
 }
-.close:before,
-.close:after {
+.close-cross:before,
+.close-cross:after {
   position: absolute;
   left: 15px;
   content: " ";
@@ -326,17 +339,19 @@ input[data-error]::after {
   width: 3px;
   background-color: #fff;
 }
-.close:before {
+.close-cross:before {
   transform: rotate(45deg);
 }
-.close:after {
+.close-cross:after {
   transform: rotate(-45deg);
 }
 .btn-submit,
-.btn-signup {
+.btn-signup,
+.confirm-close-btn {
   background: #fe142f;
   display: block;
   margin: 0 auto;
+  margin-top: 18px;
   border-radius: 7px;
   font-size: 1rem;
   padding: 12px 82px;
@@ -344,6 +359,31 @@ input[data-error]::after {
   cursor: pointer;
   border: 0;
 }
+.confirmOverlay {
+  padding: 40px 40px 15px 40px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #232323;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3 ease-in-out;
+}
+.confirmMessage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-size: 36px;
+}
+
 /* custom select styles */
 .custom-select {
   position: relative;
@@ -416,7 +456,9 @@ input[data-error]::after {
   font-size: 16px;
 }
 .hero-section {
-  min-height: 93vh;
+  /* min-height: 93vh; */
+  max-height: 657px;
+  max-width: 1240px;
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -470,6 +512,7 @@ input[data-error]::after {
 }
 .hero-img img {
   width: 100%;
+  object-fit: cover;
   height: 100%;
   display: block;
   padding: 0;
@@ -485,8 +528,8 @@ input[data-error]::after {
   display: none;
 }
 footer {
-  padding-left: 2vw;
-  padding-right: 2vw;
+  /* padding-left: 2vw; */
+  /* padding-right: 2vw; */
   margin: 0 20px;
 }
 @media screen and (max-width: 800px) {
