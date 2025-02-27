@@ -119,13 +119,42 @@ function isEmailValid(e) {
 
 function isDateOfBirthValid(e) {
   const input = e.target;
+  const dateOfBirth = new Date(input.value);
 
   if (!input.value) {
-    formErrors.isDateOfBirthValid = false;
+    formErrors.isDateOfBirthValid = false; // check if the input is empty
     setError(input, "Veuillez entrer votre date de naissance");
   } else {
-    formErrors.isDateOfBirthValid = true;
-    setError(input, "");
+    // we check if the date of birth is valid
+    if (isNaN(dateOfBirth.getTime())) {
+      formErrors.isDateOfBirthValid = false;
+      setError(input, "La date de naissance est invalide");
+    } else {
+      // we calculate the age of the person
+      const today = new Date();
+      let age = today.getFullYear() - dateOfBirth.getFullYear();
+      const month = today.getMonth() - dateOfBirth.getMonth();
+
+      // Adjust age if birthday hasn't passed yet this year
+      if (
+        month < 0 ||
+        (month === 0 && today.getDate() < dateOfBirth.getDate())
+      ) {
+        age--;
+      }
+
+      // Check is the age is between 16 & 99 yo
+      if (age >= 16 && age <= 99) {
+        formErrors.isDateOfBirthValid = true;
+        setError(input, "");
+      } else {
+        formErrors.isDateOfBirthValid = false;
+        setError(
+          input,
+          "Vous devez avoir entre 16 et 99 ans pour vous inscrire"
+        );
+      }
+    }
   }
 }
 
@@ -136,9 +165,16 @@ function isDateOfBirthValid(e) {
 
 function isQuantityValid(e) {
   const input = e.target;
-  if (input.value.trim() === "" || isNaN(input.value)) {
+  const quantity = parseInt(input.value.trim(), 10); // convert value in integer
+
+  if (
+    input.value.trim() === "" ||
+    isNaN(quantity) ||
+    quantity < 0 ||
+    quantity > 99
+  ) {
     formErrors.isQuantityValid = false;
-    setError(input, "Veuillez entrer un nombre valide");
+    setError(input, "Veuillez entrer un nombre valide entre 0 et 99");
   } else {
     formErrors.isQuantityValid = true;
     setError(input, "");
