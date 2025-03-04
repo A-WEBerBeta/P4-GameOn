@@ -408,7 +408,7 @@ input[data-error]::after {
   flex-direction: column;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.3 ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 .confirmMessage {
   width: 100%;
